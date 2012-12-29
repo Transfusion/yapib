@@ -22,7 +22,7 @@ class HelloBot(bot.SimpleBot):
             self.send_message(event.target, "Untinied: "+str(to))
         if event.message.startswith("!system"):
             self.send_message(event.target, str(platform.uname()))
-        if event.message.find("http://") >=0 :
+        if event.message.find("http") >=0 :
             u = re.search("(?P<url>https?://[^\s]+)", event.message).group("url")
             if len(str(u))<21 or \
                event.message.find("!tiny") >=0 or \
