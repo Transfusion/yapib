@@ -22,25 +22,25 @@ class HelloBot(bot.SimpleBot):
             self.send_message(event.target, "Untinied: "+str(to))
         if event.message.startswith("!system"):
             self.send_message(event.target, str(platform.uname()))
-        if event.message.find("http://") and event.message.find("tiny") >=0:
-            pass
-        else:
+        if event.message.find("http://") >=0 :
             u = re.search("(?P<url>https?://[^\s]+)", event.message).group("url")
-            if u.find("tinyurl"):
-                pass
-            if len(u)<21:
+            if len(str(u))<21 or \
+               event.message.find("!tiny") >=0 or \
+               event.message.find("!untiny") >=0 or \
+               u == None:
                 pass
             else:
                 to = tinyurl.create_one(u)
-            self.send_message(event.target, str(to))
+                self.send_message(event.target, str(to))
         if event.message.startswith("!cpu"):
             self.send_message(event.target, str(getcpu()))
         if event.message.startswith("!time"):
             self.send_message(event.target, str(time.ctime()))
 
-        if (event.message.startswith("!tiny")) and (str(params[0]).startswith("www.")):
-            to = tinyurl.create_one("http://"+str(params[0]))
-            self.send_message(event.target, str(to))
+        if (event.message.startswith("!tiny")) and \
+           (str(params[0]).startswith("www.")):
+              to = tinyurl.create_one("http://"+str(params[0]))
+              self.send_message(event.target, str(to))
         elif (event.message.startswith("!tiny")):
             to = tinyurl.create_one(str(params[0]))
             self.send_message(event.target, str(to))
@@ -50,6 +50,6 @@ class HelloBot(bot.SimpleBot):
 if __name__ == "__main__":
     hello_bot = HelloBot("TinyurlBot")
 
-    hello_bot.connect("irc.freenode.com", channel="[#botwar, #music]")
+    hello_bot.connect("irc.freenode.com", channel="#botwar")
 
     start_all()
