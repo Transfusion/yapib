@@ -90,10 +90,12 @@ class yapib(bot.SimpleBot):
 
 
     def on_private_message(self, event):
+        tx = event.message.split()
+        rx = tx[0].upper()
+        params = tx[1:]
         if event.message.startswith("!say") and str(event.host) in yapib.admin_hostmask:
             t = shlex.split(event.message)
-            
-            self.send_message(str(t[1]), str(t[2]))
+            self.send_message(str(t[1]), ' '.join(params[1:]))
         
         if event.message.startswith("!chance") and str(event.host) in yapib.admin_hostmask:
             
