@@ -5,6 +5,8 @@ from pygoogle import pygoogle
 from bs4 import BeautifulSoup
 from untinyurl import untiny
 import gdata.youtube
+import gtranslate
+import spwiki
 import gdata.youtube.service
 
 class yapib(bot.SimpleBot):
@@ -60,7 +62,7 @@ class yapib(bot.SimpleBot):
 
         def xstr(s):
             if s is None:
-                return 'null'
+                return 'auto'
             return str(s)
                 
         def paste_code(to):
@@ -117,6 +119,29 @@ class yapib(bot.SimpleBot):
         if event.message.startswith("!time"):
             self.send_message(event.target, str(time.ctime()))
 
+        if event.message.startswith("!trans"):
+            t = shlex.split(event.message)
+            try:
+                l1 = xstr(t[2])
+            except IndexError:
+                l1 = "auto"
+            try:
+                l2 = xstr(t[3])
+            except IndexError:
+                l2 = "auto"
+            langlist = ["af", "ht", "sr", "sq" , "iw", "sk", "ar", "hi", "sl", "be", "hu", "es", "bg", "is", "sw", "ca", "id", "sv", \
+ "zh-CN", "ga", "th", "zh-TW", "it", "tr", "cs", "ja", "uk", "da", "ko"," vi", "nl", "lv", "cy", "en", "et", \
+ "tl", "mt", "fi", "no", "fr", "pl", "gl", "pt", "de", "ro", "el", "ru"]
+            if l1 not in langlist:
+                l1 = "auto"
+            if l2 not in langlist:
+                l2 = "auto"
+            u = t[1]
+            lz = gtranslate.translate(u, l1, l2)
+            self.send_message(event.target, lz+" \x02\x0310G\x03\x034o\x037o\x0310g\x039l\x034e\x03\x02 \x02\x0310T\x03\x034r\x03\x037a\x03\x0310n\x03\x039s\x03\x034f\x03\x0310u\x03\x034s\x03\x039i\x03\x037o\x03\x034n\x02".encode('utf8')+" ".encode('utf8')+"\x02))\x02".encode('utf8'))
+
+        else: pass
+
         if (event.message.startswith("!tiny")) and \
            (str(params[0]).startswith("www.")):
               to = tinyurl.create_one("http://"+str(params[0]))
@@ -138,15 +163,17 @@ class yapib(bot.SimpleBot):
             self.send_message(event.source, "\x034!title http://wiki.mibbit.com/index.php/Assign_a_channel_bot\x03"+" : Gets URL Title. So you don't accidental NSFW in public place.")
             self.send_message(event.source, "\x034!paste \"My face is very ugly, dear Diary.]/[Please help me get better-looking face.]/[I am broke.\"\x03"+" : Pastes to dpaste.de and ]/[ is the newline character")
             self.send_message(event.source, "\x034!tracert cia.gov\x03"+" : Traceroute, supports hostnames and IPs. no IPv6.")
+            self.send_message(event.source, "\x034!trans '\xd0\xa2\xd1\x8b \xd0\xb4\xd0\xb5\xd0\xb9\xd1\x81\xd1\x82\xd0\xb2\xd0\xb8\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c\xd0\xbd\xd0\xbe \xd0\xbb\xd1\x8e\xd0\xb1\xd0\xb8\xd1\x88\xd1\x8c \xd0\xbc\xd0\xb5\xd0\xbd\xd1\x8f' en ru"+" \
+                              : Google Translate. Enclose your text in either single or double quotes. List of languages & abbrevation: http://code.google.com/p/python-google-translator/ ; this isn't the library being used tho.")
 
         if event.message.startswith("!g"):
-            gs = pygoogle(str(params[0:]))
+            gs = pygoogle(" ".join(params[0:]))
             gs.pages = 1
             self.send_message(event.target, "Found "+"\x02"+str(gs.get_result_count())+"\x02"+" Results"+" - \x02\x0310G\x03\x034o\x03\x037o\x0310g\x03\x039l\x03\x034e\x03\x02")
             try:
                 searchresults = gs.search()
                 for i in searchresults.keys():
-                    self.send_message(event.target, i.encode("utf-8")+" "+searchresults[i].encode('utf8'))
+                    self.send_message(event.target, i.encode("utf-8")+" "+searchresults[i].encode("utf-8"))
             except TypeError:
                 self.send_message(event.target, "Result could not be fetched.")
 
@@ -164,14 +191,14 @@ class yapib(bot.SimpleBot):
             except AttributeError:
                 self.send_message(event.target, "Could not get title/No title")
 
-        if event.message.startswith("!noresults"):
-            u = self.gresults
-            try:
-                self.gresults = int(params[0])
-            except TypeError:
-                self.send_message = (event.target, "Not an integer")
-            if self.gresults > 6:
-                self.send_message = (event.target, "Please don't be an ...... 7 is the limit.".encode('utf8'))
+#        if event.message.startswith("!noresults"):
+#            u = self.gresults
+#            try:
+#                self.gresults = int(params[0])
+#            except TypeError:
+#                self.send_message = (event.target, "Not an integer")
+#            if self.gresults > 6:
+#                self.send_message = (event.target, "Please don't be an ...... 7 is the limit.".encode('utf8'))
 
         if event.message.startswith("!tracert"):
             tracelist = []
@@ -190,8 +217,22 @@ class yapib(bot.SimpleBot):
                 int(th[2])
             except Exception, e:
                 self.send_message(event.target, "Invalid number")
-            for p in ud(th[1], int(th[2])):
-                self.send_message(event.target, p.encode('utf8'))
+            try:
+                for p in ud(th[1], int(th[2])):
+                    self.send_message(event.target, p.encode('utf8'))
+            except IndexError:
+                self.send_message(event.target, "No results!")
+                
+        if event.message.startswith("!wp"):
+            if ".wikipedia.org/".encode('utf8') not in params[0]:
+                self.send_message(event.target, "use !g searchterm site:wikipedia.org - for an exact url.")
+            else:
+                u = spwiki.shortwiki(params[0])
+                if not u:
+                    self.send_message(event.target, "Failed to get article.")
+                else:
+                    self.send_notice(event.source, spwiki.shortwiki(params[0]))
+                    self.send_message(event.target, "Notice Sent.")
 
         if event.message.startswith("!yinfo"):
             
@@ -251,7 +292,7 @@ class yapib(bot.SimpleBot):
 
         if event.message.startswith("!chgpass") and str(event.host) in self.admin_hostmask:
             self.ns_password = str(params[0])
-            self.send_message(event.source, "pass changed to"+str(params[0]))
+            self.send_message(event.source, "NS Pass changed to : "+str(params[0]))
         else: pass
 
         if event.message.startswith("!quit") and str(event.host) in self.admin_hostmask:
@@ -284,3 +325,11 @@ if __name__ == "__main__":
     instance.connect("irc.mibbit.net", channel=["#blahblah"])
 
     start_all()
+
+
+
+
+
+
+
+
