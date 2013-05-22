@@ -91,7 +91,7 @@ class yapib(bot.SimpleBot):
         if event.message.startswith("!ping"):
             self.send_message(event.target, str("PONG"))
             
-        if event.message.startswith("!untiny"):
+        if event.message.startswith("!untiny") and len(shlex.split(event.message)) > 1:
             to = untiny(str(params[0]))
             self.send_message(event.target, "Untinied: "+str(to))
             
@@ -119,7 +119,7 @@ class yapib(bot.SimpleBot):
         if event.message.startswith("!time"):
             self.send_message(event.target, str(time.ctime()))
 
-        if event.message.startswith("!trans"):
+        if event.message.startswith("!trans") and len(shlex.split(event.message)) > 1:
             t = shlex.split(event.message)
             try:
                 l1 = xstr(t[2])
@@ -142,14 +142,14 @@ class yapib(bot.SimpleBot):
 
         else: pass
 
-        if (event.message.startswith("!tiny")) and \
-           (str(params[0]).startswith("www.")):
-              to = tinyurl.create_one("http://"+str(params[0]))
-              self.send_message(event.target, str(to))
-        elif (event.message.startswith("!tiny")):
-            to = tinyurl.create_one(str(params[0]))
-            self.send_message(event.target, str(to))
-        else: pass
+        if event.message.startswith("!tiny") and len(shlex.split(event.message)) > 1:
+            if str(params[0]).startswith("www."):
+                to = tinyurl.create_one("http://"+str(params[0]))
+                self.send_message(event.target, str(to))
+            elif event.message.startswith("!tiny"):
+                to = tinyurl.create_one("http://"+str(params[0]))
+                self.send_message(event.target, str(to))
+            else: pass
 
         if event.message.startswith("!help"):
             self.send_message(event.source, "\x034!time\x03"+" : Current date and time")
@@ -164,10 +164,10 @@ class yapib(bot.SimpleBot):
             self.send_message(event.source, "\x034!paste \"My face is very ugly, dear Diary.]/[Please help me get better-looking face.]/[I am broke.\"\x03"+" : Pastes to dpaste.de and ]/[ is the newline character")
             self.send_message(event.source, "\x034!tracert cia.gov\x03"+" : Traceroute, supports hostnames and IPs. no IPv6.")
             self.send_message(event.source, "\x034!trans '\xd0\xa2\xd1\x8b \xd0\xb4\xd0\xb5\xd0\xb9\xd1\x81\xd1\x82\xd0\xb2\xd0\xb8\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c\xd0\xbd\xd0\xbe \xd0\xbb\xd1\x8e\xd0\xb1\xd0\xb8\xd1\x88\xd1\x8c \xd0\xbc\xd0\xb5\xd0\xbd\xd1\x8f' en ru\x03"+" \
-                              : Google Translate. Enclose your text in either single or double quotes. List of languages & abbrevation: http://code.google.com/p/python-google-translator/ ; this isn't the library being used tho.")
+: Google Translate. Enclose your text in either single or double quotes. List of languages & abbrevation: http://code.google.com/p/python-google-translator/ ; this isn't the library being used tho.")
             self.send_message(event.source, "\x034!wp http://en.wikipedia.org/wiki/Manga\x03"+" : supports UTF-8 links. \x034!g example site:wikipedia.org\x03 will return wikipedia links.")
 
-        if event.message.startswith("!g"):
+        if event.message.startswith("!g") and len(shlex.split(event.message)) > 1:
             gs = pygoogle(" ".join(params[0:]))
             gs.pages = 1
             self.send_message(event.target, "Found "+"\x02"+str(gs.get_result_count())+"\x02"+" Results"+" - \x02\x0310G\x03\x034o\x03\x037o\x0310g\x03\x039l\x03\x034e\x03\x02")
@@ -178,7 +178,7 @@ class yapib(bot.SimpleBot):
             except TypeError:
                 self.send_message(event.target, "Result could not be fetched.")
 
-        if event.message.startswith("!title"):
+        if event.message.startswith("!title") and len(shlex.split(event.message)) > 1:
             try:
                 response = urllib2.urlopen(str(params[0]))
             except ValueError:
@@ -201,7 +201,7 @@ class yapib(bot.SimpleBot):
 #            if self.gresults > 6:
 #                self.send_message = (event.target, "Please don't be an ...... 7 is the limit.".encode('utf8'))
 
-        if event.message.startswith("!tracert"):
+        if event.message.startswith("!tracert") and len(shlex.split(event.message)) > 1:
             tracelist = []
             for line in runProcess(['traceroute', str(params[0])]):
                 tracelist.append(line)
@@ -224,7 +224,7 @@ class yapib(bot.SimpleBot):
             except IndexError:
                 self.send_message(event.target, "No results!")
                 
-        if event.message.startswith("!wp"):
+        if event.message.startswith("!wp") and len(shlex.split(event.message)) > 1:
             if ".wikipedia.org/".encode('utf8') not in params[0]:
                 self.send_message(event.target, "use !g searchterm site:wikipedia.org - for an exact url.")
             else:
@@ -235,7 +235,7 @@ class yapib(bot.SimpleBot):
                     self.send_notice(event.source, spwiki.shortwiki(params[0]))
                     self.send_message(event.target, "Notice Sent.")
 
-        if event.message.startswith("!yinfo"):
+        if event.message.startswith("!yinfo") and len(shlex.split(event.message)) > 1:
             
             if video_id(str(params[0])) == "null":
                 self.send_message(event.target, "not a youtube video")
@@ -255,7 +255,7 @@ class yapib(bot.SimpleBot):
                                   u+" out of 5")
         else: pass
 
-        if event.message.startswith("!paste"):
+        if event.message.startswith("!paste") and len(shlex.split(event.message)) > 1:
             t = shlex.split(event.message)
             u = t[1].replace(']\[', '\n')
             # ]\[ is newline.
