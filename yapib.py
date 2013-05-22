@@ -163,8 +163,9 @@ class yapib(bot.SimpleBot):
             self.send_message(event.source, "\x034!title http://wiki.mibbit.com/index.php/Assign_a_channel_bot\x03"+" : Gets URL Title. So you don't accidental NSFW in public place.")
             self.send_message(event.source, "\x034!paste \"My face is very ugly, dear Diary.]/[Please help me get better-looking face.]/[I am broke.\"\x03"+" : Pastes to dpaste.de and ]/[ is the newline character")
             self.send_message(event.source, "\x034!tracert cia.gov\x03"+" : Traceroute, supports hostnames and IPs. no IPv6.")
-            self.send_message(event.source, "\x034!trans '\xd0\xa2\xd1\x8b \xd0\xb4\xd0\xb5\xd0\xb9\xd1\x81\xd1\x82\xd0\xb2\xd0\xb8\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c\xd0\xbd\xd0\xbe \xd0\xbb\xd1\x8e\xd0\xb1\xd0\xb8\xd1\x88\xd1\x8c \xd0\xbc\xd0\xb5\xd0\xbd\xd1\x8f' en ru"+" \
+            self.send_message(event.source, "\x034!trans '\xd0\xa2\xd1\x8b \xd0\xb4\xd0\xb5\xd0\xb9\xd1\x81\xd1\x82\xd0\xb2\xd0\xb8\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c\xd0\xbd\xd0\xbe \xd0\xbb\xd1\x8e\xd0\xb1\xd0\xb8\xd1\x88\xd1\x8c \xd0\xbc\xd0\xb5\xd0\xbd\xd1\x8f' en ru\x03"+" \
                               : Google Translate. Enclose your text in either single or double quotes. List of languages & abbrevation: http://code.google.com/p/python-google-translator/ ; this isn't the library being used tho.")
+            self.send_message(event.source, "\x034!wp http://en.wikipedia.org/wiki/Manga\x03"+" : supports UTF-8 links. \x034!g example site:wikipedia.org\x03 will return wikipedia links.")
 
         if event.message.startswith("!g"):
             gs = pygoogle(" ".join(params[0:]))
@@ -325,11 +326,3 @@ if __name__ == "__main__":
     instance.connect("irc.mibbit.net", channel=["#blahblah"])
 
     start_all()
-
-
-
-
-
-
-
-
