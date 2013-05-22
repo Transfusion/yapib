@@ -32,3 +32,6 @@ cleverbot.py
 =====
 A simple bot that allows users to talk to http://www.cleverbot.com via IRC through http://code.google.com/p/pycleverbot/ 's API.
 Will respond if its name is mentioned 100% of the time. Uses random.randint() which can be set to respond x% of the time in normal chat.
+
+Dependencies:
+* https://code.google.com/p/pycleverbot/
