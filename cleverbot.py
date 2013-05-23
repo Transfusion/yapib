@@ -36,12 +36,12 @@ class yapib(bot.SimpleBot):
         
         def cleverbotify(strang):
             out = strang.translate(string.maketrans("",""), string.punctuation)
-            if out.rstrip('?:!.,;').find(self.nick)+9 == len(out.rstrip('?:!.,;')):
-                strang = re.sub(self.nick,"",strang,count=1)
+            if out.rstrip('?:!.,;').find(self.nick)+len(self.nick) == len(out.rstrip('?:!.,;')):
+                strang = re.sub(self.nick,"",strang,count=1) # Strip nick if nick at end.
             elif out.find(self.nick+" ") == 0:
-                strang = strang[10:]
+                strang = strang[len(self.nick)+1:] #Strip nick if at beginning.
             elif out.find(" "+self.nick+" ") !=0:
-                strang = re.sub(self.nick,"you",strang,count=1)
+                strang = re.sub(self.nick,"you",strang,count=1) #Replace with you if in middle.
             return strang
    
 
@@ -106,7 +106,7 @@ class yapib(bot.SimpleBot):
 
     def on_ctcp_action(self, event):
         convert_first_to_generator = (str(w) for w in event.params)
-        mesg = ''.join(convert_first_to_generator)
+        mesg = ' '.join(convert_first_to_generator)
         print "CTCP : "+mesg
         def cleverbotify(strang):
             out = strang.translate(string.maketrans("",""), string.punctuation)
@@ -122,7 +122,7 @@ class yapib(bot.SimpleBot):
             print str(x)+" chancethistime"+" action"
             if x <=self.chance:
                 gx = self.mycb.Ask("*"+str(cleverbotify(mesg))+"*")
-                if gx[0] == "*" and gx[len(gx)-2:len(gx)-1] == "*.":
+                if gx[0] == "*" and gx[len(gx)-2:len(gx)] == "*.":
                     self.send_action(event.target, gx[1:-2]+".")
                 else: self.send_message(event.target, gx)
 
@@ -130,7 +130,7 @@ class yapib(bot.SimpleBot):
 #            self.send_action(event.target, self.mycb.Ask("*"+str(cleverbotify(mesg))+"*")[1:-2]+".")
             gx = self.mycb.Ask("*"+str(cleverbotify(mesg))+"*")
             print gx
-            if gx[0] == "*" and gx[len(gx)-2:len(gx)-1] == "*.":
+            if gx[0] == "*" and gx[len(gx)-2:len(gx)] == "*.":
                 self.send_action(event.target, gx[1:-2]+".")
             else: self.send_message(event.target, gx)
 
@@ -142,4 +142,7 @@ if __name__ == "__main__":
 
 
     start_all()
+
+
+
 
