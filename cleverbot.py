@@ -107,7 +107,9 @@ class yapib(bot.SimpleBot):
         
 
     def on_ctcp_action(self, event):
-        
+        convert_first_to_generator = (str(w) for w in event.params)
+        mesg = ''.join(convert_first_to_generator)
+        print "CTCP : "+mesg
         def cleverbotify(strang):
             out = strang.translate(string.maketrans("",""), string.punctuation)
             if out.rstrip('?:!.,;').find(self.nick)+9 == len(out.rstrip('?:!.,;')):
@@ -121,9 +123,20 @@ class yapib(bot.SimpleBot):
             x = random.randint(0,10)
             print str(x)+" chancethistime"+" action"
             if x <=self.chance:
-                convert_first_to_generator = (str(w) for w in event.params)
-                u = ''.join(convert_first_to_generator)
-                self.send_action(event.target, self.mycb.Ask("*"+str(cleverbotify(u))+"*")[1:-2]+".")
+                gx = self.mycb.Ask("*"+str(cleverbotify(mesg))+"*")
+                if gx[0] == "*" and gx[len(gx)-2:len(gx)] == "*.":
+                    self.send_action(event.target, gx[1:-2]+".")
+                else: self.send_message(event.target, gx)
+
+        if self.nick in mesg:
+#            self.send_action(event.target, self.mycb.Ask("*"+str(cleverbotify(mesg))+"*")[1:-2]+".")
+            gx = self.mycb.Ask("*"+str(cleverbotify(mesg))+"*")
+            print gx
+	        print gx[len(gx)-2:len(gx)]
+            if gx[0] == "*" and gx[len(gx)-2:len(gx)] == "*.":
+                self.send_action(event.target, gx[1:-2]+".")
+            else: self.send_message(event.target, gx)
+
         else: pass
 
 if __name__ == "__main__":
@@ -132,5 +145,7 @@ if __name__ == "__main__":
 
 
     start_all()
+
+
 
 
