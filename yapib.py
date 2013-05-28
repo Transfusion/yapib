@@ -167,7 +167,7 @@ class yapib(bot.SimpleBot):
 : Google Translate. Enclose your text in either single or double quotes. List of languages & abbrevation: http://code.google.com/p/python-google-translator/ ; this isn't the library being used tho.")
             self.send_message(event.source, "\x034!wp http://en.wikipedia.org/wiki/Manga\x03"+" : supports UTF-8 links. \x034!g example site:wikipedia.org\x03 will return wikipedia links.")
 
-        if event.message.startswith("!g") and len(shlex.split(event.message)) > 1:
+        if event.message.startswith("!g") and len(" ".split(event.message)) > 1:
             gs = pygoogle(" ".join(params[0:]))
             gs.pages = 1
             self.send_message(event.target, "Found "+"\x02"+str(gs.get_result_count())+"\x02"+" Results"+" - \x02\x0310G\x03\x034o\x03\x037o\x0310g\x03\x039l\x03\x034e\x03\x02")
